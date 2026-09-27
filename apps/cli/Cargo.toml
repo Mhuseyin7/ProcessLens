@@ -1,0 +1,19 @@
+[package]
+name = "processlens"
+description = "Developer-focused local process and port inspector"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "processlens"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+processlens-core = { path = "../../crates/core" }
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+tracing-subscriber.workspace = true

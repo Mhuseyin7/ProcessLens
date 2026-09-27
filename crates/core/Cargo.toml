@@ -1,0 +1,13 @@
+[package]
+name = "processlens-core"
+description = "Local-first process, port, and project inspection domain for ProcessLens"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+bollard = "0.19"
+serde.workspace = true
+sysinfo.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
