@@ -18,6 +18,9 @@ pub fn group_development_services(
             .working_directory
             .value()
             .and_then(|cwd| detect_project(cwd));
+        if project.is_none() && !is_development_process(&process.name) {
+            continue;
+        }
         let key = project
             .as_ref()
             .map(|p| p.root.display().to_string())
@@ -42,4 +45,26 @@ pub fn group_development_services(
     let mut services: Vec<_> = groups.into_values().collect();
     services.sort_by(|a, b| a.name.cmp(&b.name));
     services
+}
+
+fn is_development_process(name: &str) -> bool {
+    let name = name.to_ascii_lowercase();
+    [
+        "node", "python", "uvicorn", "gunicorn", "cargo", "rustc", "go", "java", "dotnet", "php",
+        "bun", "deno", "vite", "next",
+    ]
+    .iter()
+    .any(|candidate| name.contains(candidate))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::is_development_process;
+
+    #[test]
+    fn does_not_classify_unrelated_desktop_processes_as_services() {
+        assert!(!is_development_process("ChatGPT.exe"));
+        assert!(is_development_process("node.exe"));
+        assert!(is_development_process("uvicorn.exe"));
+    }
 }
