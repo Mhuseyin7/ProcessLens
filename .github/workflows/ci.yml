@@ -2,9 +2,12 @@ name: CI
 on:
   push:
   pull_request:
+permissions:
+  contents: read
 jobs:
   rust:
     runs-on: windows-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -15,10 +18,13 @@ jobs:
       - run: cargo run -p processlens -- doctor
   desktop:
     runs-on: windows-latest
+    timeout-minutes: 20
     defaults: { run: { working-directory: apps/desktop } }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: npm, cache-dependency-path: apps/desktop/package.json }
-      - run: npm install
+        with: { node-version: 22, cache: npm, cache-dependency-path: apps/desktop/package-lock.json }
+      - run: npm ci
+      - run: npm run lint
       - run: npm run build
+      - run: npm audit --omit=dev --audit-level=high
