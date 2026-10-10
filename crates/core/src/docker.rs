@@ -13,7 +13,7 @@ pub enum DockerDiscoveryError {
 pub async fn list_running_containers() -> Result<Vec<DockerContainerInfo>, DockerDiscoveryError> {
     let docker = Docker::connect_with_local_defaults()?;
     let containers = docker
-        .list_containers(Some(ListContainersOptionsBuilder::new().all(true).build()))
+        .list_containers(Some(ListContainersOptionsBuilder::new().all(false).build()))
         .await?;
     Ok(containers
         .into_iter()
