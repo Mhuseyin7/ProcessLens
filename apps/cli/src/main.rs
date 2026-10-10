@@ -269,6 +269,12 @@ fn terminate(inspector: &Inspector, pid: u32, force: bool, yes: bool) -> anyhow:
             initial.name
         );
     }
+    if initial.start_time_unix == 0 {
+        bail!(
+            "refusing to terminate {} ({pid}) because process start time is unavailable; cannot safely rule out PID reuse",
+            initial.name
+        );
+    }
     if !yes {
         bail!(
             "Refusing to terminate {} ({pid}) without --yes. Risk: {risk:?}. Re-run with --yes after review.",
